@@ -1,13 +1,8 @@
-package com.cheng.user.entity;
+package com.cheng.mybatis.user.entity;
+
 
 import java.io.Serializable;
-
-import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.activerecord.Model;
-import java.io.Serializable;
 
 /**
  * <p>
@@ -17,31 +12,25 @@ import java.io.Serializable;
  * @author chengyin
  * @since 2017-08-19
  */
-public class User extends Model<User> {
+public class User{
 
-    private static final long serialVersionUID = 1L;
 
-	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
      * 用户名
      */
-	@TableField("user_name")
 	private String userName;
     /**
      * 用户账号
      */
-	@TableField("user_account")
 	private String userAccount;
     /**
      * 创建时间
      */
-	@TableField("create_time")
 	private Date createTime;
     /**
      * 更新时间
      */
-	@TableField("update_time")
 	private Date updateTime;
     /**
      * 备注
@@ -95,11 +84,6 @@ public class User extends Model<User> {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	@Override
-	protected Serializable pkVal() {
-		return this.id;
 	}
 
 	@Override

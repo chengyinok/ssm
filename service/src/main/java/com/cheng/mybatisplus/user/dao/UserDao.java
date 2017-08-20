@@ -1,6 +1,6 @@
-package com.cheng.user.dao;
+package com.cheng.mybatisplus.user.dao;
 
-import com.cheng.user.entity.User;
+import com.cheng.mybatisplus.user.entity.User;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**

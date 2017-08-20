@@ -1,11 +1,8 @@
-package com.cheng.user.dao;
+package com.cheng.mybatisplus.user.dao;
 
 import com.cheng.base.BaseDaoTest;
-import com.cheng.user.entity.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by chengyin on 2017/8/19.

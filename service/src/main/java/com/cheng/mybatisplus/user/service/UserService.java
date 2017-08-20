@@ -1,6 +1,6 @@
-package com.cheng.user.service;
+package com.cheng.mybatisplus.user.service;
 
-import com.cheng.user.entity.User;
+import com.cheng.mybatisplus.user.entity.User;
 import com.baomidou.mybatisplus.service.IService;
 
 /**

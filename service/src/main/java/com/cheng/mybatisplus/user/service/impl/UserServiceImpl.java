@@ -1,8 +1,8 @@
-package com.cheng.user.service.impl;
+package com.cheng.mybatisplus.user.service.impl;
 
-import com.cheng.user.entity.User;
-import com.cheng.user.dao.UserDao;
-import com.cheng.user.service.UserService;
+import com.cheng.mybatisplus.user.entity.User;
+import com.cheng.mybatisplus.user.dao.UserDao;
+import com.cheng.mybatisplus.user.service.UserService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

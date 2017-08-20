@@ -43,13 +43,13 @@
         <!-- 扫描sql配置文件:mapper需要的xml文件 -->
         <property name="mapperLocations">
             <list>
-                <value>classpath*:mapper/*/*.xml</value>
+                <value>classpath*:mapper/mybatisplus/*/*.xml</value>
             </list>
         </property>
         <!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
-        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <property name="configLocation" value="classpath:mybatisplus/mybatis-config.xml"/>
         <!-- 扫描entity包 使用别名 -->
-        <property name="typeAliasesPackage" value="com.cheng.*.entity"/>
+        <property name="typeAliasesPackage" value="com.cheng.mybatisplus"/>
 
     </bean>
 
@@ -58,7 +58,7 @@
         <!-- 注入sqlSessionFactory -->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
         <!-- 给出需要扫描Dao接口包 -->
-        <property name="basePackage" value="com.cheng.*.dao"/>
+        <property name="basePackage" value="com.cheng.mybatisplus.*.dao"/>
     </bean>
 
 </beans>
