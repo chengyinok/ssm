@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface UserDao extends BaseMapper<User> {
 
+    int insertUser(User user);
 }

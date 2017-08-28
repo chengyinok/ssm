@@ -16,4 +16,17 @@
     <sql id="Base_Column_List">
         id, user_name AS userName, user_account AS userAccount, create_time AS createTime, update_time AS updateTime, remark
     </sql>
+
+    <insert id="insertUser" parameterType="com.cheng.mybatisplus.user.entity.User">
+        INSERT (user_name,user_account,create_time) VALUE (#{userName},#{userAccount},now())
+    </insert>
+
+    <update id="updateUserBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" close=";" separator=";">
+            update  user  set
+            user_name = #{item.userName,jdbcType=VARCHAR},
+            user_account = #{item.userAccount,jdbcType=VARCHAR}
+            where id = #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
 </mapper>

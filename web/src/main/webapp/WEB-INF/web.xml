@@ -2,10 +2,13 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          id="WebApp_ID" version="3.0">
-  <!-- Spring 配置路径 -->
+  <!-- Web容器加载顺序ServletContext——context——param——listener——filter——servlet -->
+
+  <!-- 指定Spring的配置文件 -->
+  <!-- 否则Spring会默认从WEB-INF下寻找配置文件,contextConfigLocation属性是Spring内部固定的 -->
   <context-param>
-  <param-name>contextConfigLocation</param-name>
-  <param-value>classpath:application-common.xml</param-value>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:application-common.xml</param-value>
   </context-param>
 
   <!-- LogBack 日志管理文件 -->
@@ -13,49 +16,30 @@
     <param-name>logbackConfigLocation</param-name>
     <param-value>classpath:log/logback.xml</param-value>
   </context-param>
+
   <listener>
     <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
   </listener>
 
+  <!-- 防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面 -->
+  <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+
   <!-- Spring 监听启动 -->
+  <!-- 实例化Spring容器 -->
+  <!-- 应用启动时,该监听器被执行,它会读取Spring相关配置文件,其默认会到WEB-INF中查找applicationContext.xml -->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
-  <!--配置DispatcherServlet -->
-  <servlet>
-    <servlet-name>springServlet</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring/application-web.xml</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>springServlet</servlet-name>
-    <url-pattern>*.do</url-pattern>
-  </servlet-mapping>
 
-  <!--<servlet>-->
-    <!--<servlet-name>spring-dispatcher</servlet-name>-->
-    <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
-    <!--&lt;!&ndash; 配置SpringMVC需要加载的配置文件 spring-xxx.xml &ndash;&gt;-->
-    <!--<init-param>-->
-      <!--<param-name>contextConfigLocation</param-name>-->
-      <!--&lt;!&ndash;<param-value>classpath:mybatis/spring-*.xml</param-value>&ndash;&gt;-->
-      <!--<param-value>classpath:application-common.xml</param-value>-->
-    <!--</init-param>-->
-    <!--<load-on-startup>1</load-on-startup>-->
-  <!--</servlet>-->
-  <!--<servlet-mapping>-->
-    <!--<servlet-name>spring-dispatcher</servlet-name>-->
-    <!--&lt;!&ndash;默认匹配所有的请求 &ndash;&gt;-->
-    <!--<url-pattern>/</url-pattern>-->
-  <!--</servlet-mapping>-->
-
+  <!-- 解决乱码问题 -->
+  <!-- forceEncoding默认为false,此时效果可大致理解为request.setCharacterEncoding("UTF-8") -->
+  <!-- forceEncoding=true后,可大致理解为request.setCharacterEncoding("UTF-8")和response.setCharacterEncoding("UTF-8") -->
   <!-- 字符集内容过滤 -->
   <filter>
     <filter-name>encodingFilter</filter-name>
@@ -73,6 +57,39 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+  <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+  <!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+  <!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+  <!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+  <filter>
+    <filter-name>shiroFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>shiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- SpringMVC核心分发器 -->
+  <servlet>
+    <servlet-name>springServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring/application-web.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springServlet</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
 
   <!-- DruidStatView -->
   <servlet>
@@ -94,26 +111,33 @@
     <url-pattern>/druid/*</url-pattern>
   </servlet-mapping>
 
-  <!--<session-config>-->
-    <!--<session-timeout>120</session-timeout>&lt;!&ndash; session改为30分钟 &ndash;&gt;-->
-  <!--</session-config>-->
-
-  <!-- 异常配置 -->
-  <!--<error-page>-->
-    <!--<error-code>400</error-code>-->
-    <!--<location>/error/400.html</location>-->
-  <!--</error-page>-->
-  <!--<error-page>-->
-    <!--<error-code>404</error-code>-->
-    <!--<location>/error/404.html</location>-->
-  <!--</error-page>-->
-  <!--<error-page>-->
-    <!--<error-code>500</error-code>-->
-    <!--<location>/error/500.html</location>-->
-  <!--</error-page>-->
+  <!-- Session超时30分钟(零或负数表示会话永不超时)-->
+  <!--
+  <session-config>
+      <session-timeout>30</session-timeout>
+  </session-config>
+   -->
 
   <!-- 欢迎界面 -->
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+
+  <!-- 异常配置 -->
+  <error-page>
+    <error-code>405</error-code>
+    <location>/WEB-INF/views/error/400.html</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/views/error/404.html</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/WEB-INF/views/error/500.html</location>
+  </error-page>
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/WEB-INF/views/error/500.html</location>
+  </error-page>
 </web-app>

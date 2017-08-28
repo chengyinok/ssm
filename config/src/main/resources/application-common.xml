@@ -7,5 +7,6 @@
 
     <import resource="classpath:/mybatisplus/application-mybatis.xml"/>
     <import resource="classpath:/spring/application-service.xml"/>
+    <!--<import resource="classpath:/spring/application-shiro.xml"/>-->
 </beans>
 
