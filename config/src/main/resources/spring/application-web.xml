@@ -22,6 +22,9 @@
     <!-- 配置静态资源，直接映射到对应的文件夹，DispatcherServlet 不处理 -->
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
 
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+
     <!-- 3.配置jsp 显示ViewResolver -->
     <!-- 配置SpringMVC的视图解析器 -->
     <!-- 其viewClass属性的默认值就是org.springframework.web.servlet.view.JstlView -->
@@ -31,10 +34,13 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+    <!-- 3.配置swagger2 -->
+    <bean name="swaggerConfig" class="com.ssm.swagger.Swagger2Config"/>
+
     <!-- 4.扫描web相关的bean -->
     <!-- 它背后注册了很多用于解析注解的处理器,其中就包括<context:annotation-config/>配置的注解所使用的处理器 -->
     <!-- 所以配置了<context:component-scan base-package="">之后,便无需再配置<context:annotation-config> -->
-    <context:component-scan base-package="com.cheng.*.controller" />
+    <context:component-scan base-package="com.ssm.controller" />
 
     <!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
     <mvc:view-controller path="/" view-name="forward:/login.jsp"/>

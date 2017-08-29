@@ -1,7 +1,7 @@
-package com.cheng.mybatisplus.user.service;
+package com.ssm.user.service;
 
-import com.cheng.mybatisplus.user.entity.User;
 import com.baomidou.mybatisplus.service.IService;
+import com.ssm.user.entity.User;
 
 /**
  * <p>
