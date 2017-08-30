@@ -5,8 +5,8 @@
 						http://www.springframework.org/schema/beans/spring-beans.xsd"
        default-lazy-init="false">
 
-    <import resource="classpath:/mybatisplus/application-mybatis.xml"/>
+    <import resource="classpath:/spring/application-mybatis.xml"/>
     <import resource="classpath:/spring/application-service.xml"/>
-    <!--<import resource="classpath:/spring/application-shiro.xml"/>-->
+    <import resource="classpath:/spring/application-shiro.xml"/>
 </beans>
 

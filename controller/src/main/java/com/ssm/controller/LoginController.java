@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by chengyin on 2017/8/20.
@@ -91,4 +92,5 @@ public class LoginController {
         SecurityUtils.getSubject().logout();
         return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/";
     }
+
 }
