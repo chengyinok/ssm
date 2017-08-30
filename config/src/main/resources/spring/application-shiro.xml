@@ -52,6 +52,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /loginController/**=anon
+                /static/**=anon
             </value>
         </property>
     </bean>

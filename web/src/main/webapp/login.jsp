@@ -18,7 +18,7 @@
 </head>
 <body>
     <div style="margin: 150px auto;">
-        <form class="form-horizontal" method="post" action="loginController/login.do" >
+        <form class="form-horizontal" method="post" action="loginController/login" >
             <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
                 <div class="col-sm-10">

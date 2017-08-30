@@ -1,94 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- 配置SpringMVC -->
-    <!-- 1.开启SpringMVC注解模式-->
-    <!-- 启用SpringMVC的注解功能,它会自动注册HandlerMapping、HandlerAdapter、ExceptionResolver的相关实例 -->
+    <!-- 1.开启SpringMVC注解模式 -->
     <!-- 简化配置：
         (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter
         (2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持
     -->
-    <mvc:annotation-driven />
+    <mvc:annotation-driven>
+        <!--设置全局时间格式化-->
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 2.静态资源默认servlet配置
         (1)加入对静态资源的处理：js,gif,png
         (2)允许使用"/"做整体映射
      -->
-    <mvc:default-servlet-handler />
-
-    <!-- 配置静态资源，直接映射到对应的文件夹，DispatcherServlet 不处理 -->
-    <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
-
-    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-
-    <!-- 3.配置jsp 显示ViewResolver -->
-    <!-- 配置SpringMVC的视图解析器 -->
-    <!-- 其viewClass属性的默认值就是org.springframework.web.servlet.view.JstlView -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-INF/views/"></property>
-        <property name="suffix" value=".jsp"></property>
-    </bean>
+    <mvc:resources mapping="/css/**" location="/static/css/"/>
+    <mvc:resources mapping="/fonts/**" location="/static/fonts/"/>
+    <mvc:resources mapping="/images/**" location="/static/images/"/>
+    <mvc:resources mapping="/js/**" location="/static/js/"/>
+    <mvc:resources mapping="/view/**" location="/static/view/"/>
+    <mvc:default-servlet-handler/>
 
     <!-- 3.配置swagger2 -->
     <bean name="swaggerConfig" class="com.ssm.swagger.SwaggerConfig"/>
 
-    <!-- 4.扫描web相关的bean -->
-    <!-- 它背后注册了很多用于解析注解的处理器,其中就包括<context:annotation-config/>配置的注解所使用的处理器 -->
-    <!-- 所以配置了<context:component-scan base-package="">之后,便无需再配置<context:annotation-config> -->
-    <context:component-scan base-package="com.ssm.controller" />
-
-    <!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
-    <mvc:view-controller path="/" view-name="forward:/login.jsp"/>
-
-    <!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
-    <!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->
-    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="exceptionMappings">
-            <props>
-                <!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/error_fileupload.jsp页面 -->
-                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">WEB-INF/views/error/error_fileupload</prop>
-                <!-- 处理其它异常(包括Controller抛出的) -->
-                <prop key="java.lang.Throwable">WEB-INF/500</prop>
-            </props>
-        </property>
+    <!-- 4.配置jsp 显示ViewResolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="10000000000"/>
+    <!-- 5.上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8"/>
+        <!-- 最大内存大小 -->
+        <property name="maxInMemorySize" value="10240"/>
+        <!-- 最大文件大小，-1为不限制大小 -->
+        <property name="maxUploadSize" value="-1"/>
     </bean>
 
-    <!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
-    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <property name="mediaTypes">
-            <map>
-                <entry key="xml" value="application/xml"/>
-                <entry key="json" value="application/json"/>
-            </map>
-        </property>
-        <property name="ignoreAcceptHeader" value="true"/>
-        <property name="favorPathExtension" value="true"/>
-    </bean>
-
-    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
-        <mvc:message-converters register-defaults="false">
-            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
-            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <!-- 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 -->
-                        <value>text/html;charset=UTF-8</value>
-                        <value>application/json;charset=UTF-8</value>
-                    </list>
-                </property>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
+    <!-- 6.扫描controller包 -->
+    <context:component-scan base-package="com.ssm.controller">
+        <!-- 制定扫包规则 ,只扫描使用@Controller注解的JAVA类 -->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
 </beans>
