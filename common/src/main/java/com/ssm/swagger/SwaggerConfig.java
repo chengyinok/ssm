@@ -26,7 +26,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @EnableWebMvc
-@ComponentScan("com.ssm.controller")
+@ComponentScan("com.ssm.*.controller")
 public class SwaggerConfig {
 
     @Bean
@@ -38,7 +38,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
 
-        Contact contact=new Contact("赵帅","http://blog.maileba.top","zhaoshuaivov@163.com");
+        Contact contact=new Contact("chengyin","http://blog.maileba.top","chengyinok@qq.com");
         ApiInfo apiInfo = new ApiInfoBuilder().license("Apache License Version 2.0").title("Swagger 集成测试").description("Swagger API Teste").contact(contact).version("1.0").build();
 
         return apiInfo;

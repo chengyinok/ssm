@@ -1,5 +1,8 @@
-package com.cheng.shiro;
+package com.ssm.shiro;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.ssm.user.entity.User;
+import com.ssm.user.service.UserService;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.shiro.SecurityUtils;
@@ -10,12 +13,19 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by chengyin on 2017/8/20.
  */
 public class MyRealm extends AuthorizingRealm {
 
+    private final static Logger logger = LoggerFactory.getLogger(MyRealm.class);
+
+    @Autowired
+    private UserService userService;
     /**
      * 为当前登录的Subject授予角色和权限
      *  经测试:本例中该方法的调用时机为需授权资源被访问时
@@ -29,7 +39,9 @@ public class MyRealm extends AuthorizingRealm {
         //      List<String> roleList = new ArrayList<String>();
         //      List<String> permissionList = new ArrayList<String>();
         //      //从数据库中获取当前登录用户的详细信息
-        //      User user = userService.getByUsername(currentUsername);
+        User user = new User();
+        user.setUserName(currentUsername);
+        user = userService.selectOne(new EntityWrapper<>(user));
         //      if(null != user){
         //          //实体类User中包含有用户角色的实体类信息
         //          if(null!=user.getRoles() && user.getRoles().size()>0){
@@ -83,28 +95,30 @@ public class MyRealm extends AuthorizingRealm {
         //两个token的引用都是一样的,本例中是org.apache.shiro.authc.UsernamePasswordToken@33799a1e
         UsernamePasswordToken token = (UsernamePasswordToken)authcToken;
         System.out.println("验证当前Subject时获取到token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
-//      User user = userService.getByUsername(token.getUsername());
-//      if(null != user){
-//          AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), user.getNickname());
-//          this.setSession("currentUser", user);
-//          return authcInfo;
-//      }else{
-//          return null;
-//      }
+        User user = new User();
+        user.setUserName(token.getUsername());
+        user = userService.selectOne(new EntityWrapper<>(user));
+      if(null != user){
+          AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.getUserName(), user.getUserAccount(), user.getUserName());
+          this.setSession("userAccount", user);
+          return authcInfo;
+      }else{
+          return null;
+      }
         //此处无需比对,比对的逻辑Shiro会做,我们只需返回一个和令牌相关的正确的验证信息
         //说白了就是第一个参数填登录用户名,第二个参数填合法的登录密码(可以是从数据库中取到的,本例中为了演示就硬编码了)
         //这样一来,在随后的登录页面上就只有这里指定的用户和密码才能通过验证
-        if("papio".equals(token.getUsername())){
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo("papio", "papio", this.getName());
-            this.setSession("currentUser", "papio");
-            return authcInfo;
-        }else if("big".equals(token.getUsername())){
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo("big", "big", this.getName());
-            this.setSession("currentUser", "big");
-            return authcInfo;
-        }
+//        if("papio".equals(token.getUsername())){
+//            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo("papio", "papio", this.getName());
+//            this.setSession("currentUser", "papio");
+//            return authcInfo;
+//        }else if("big".equals(token.getUsername())){
+//            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo("big", "big", this.getName());
+//            this.setSession("currentUser", "big");
+//            return authcInfo;
+//        }
         //没有返回登录用户名对应的SimpleAuthenticationInfo对象时,就会在LoginController中抛出UnknownAccountException异常
-        return null;
+//        return null;
     }
 
     /**
@@ -115,7 +129,7 @@ public class MyRealm extends AuthorizingRealm {
         Subject currentUser = SecurityUtils.getSubject();
         if(null != currentUser){
             Session session = currentUser.getSession();
-            System.out.println("Session默认超时时间为[" + session.getTimeout() + "]毫秒");
+            logger.info("Session默认超时时间为[" + session.getTimeout() + "]毫秒");
             if(null != session){
                 session.setAttribute(key, value);
             }
