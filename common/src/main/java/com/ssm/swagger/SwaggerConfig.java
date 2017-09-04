@@ -21,6 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Restful API 访问路径:
  * http://IP:port/{context-path}/swagger-ui.html
  * eg:http://localhost:8080/swagger-ui.html
+ * eg:http://localhost:8080/doc.html
  */
 @Component
 @Configuration
