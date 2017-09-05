@@ -15,59 +15,39 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <style>
-        .login-box{
-            border: 1px solid #004444;
-            margin: 50px auto;
-            width: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="static/css/login.css">
 </head>
-<body>
-<div class="login-box">
-    <%--<div class="col-md-6">--%>
-        <!-- Horizontal Form -->
-        <div class="box box-info">
-            <div class="box-header with-border">
-                <h3 class="box-title">Horizontal Form</h3>
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form class="form-horizontal">
-                <div class="box-body">
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">用户名</label>
+<body class="login-body">
+    <div class="login-box">
+                <h3 class="login-head">用户登录</h3>
+                <form class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">用户名</label>
 
-                        <div class="col-sm-9">
-                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
-
-                        <div class="col-sm-9">
-                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> 记住我
-                                </label>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <input type="checkbox"> 记住我
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <%--<button type="submit" class="btn btn-default">Cancel</button>--%>
-                    <button type="submit" class="btn btn-info">登录</button>
-                </div>
-                <!-- /.box-footer -->
-            </form>
-        </div>
-    <%--</div>--%>
-</div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <%--<button type="submit" class="btn btn-default">Cancel</button>--%>
+                        <button type="submit" class="btn btn-info">登录</button>
+                </form>
+
+    </div>
 </body>
 </html>
