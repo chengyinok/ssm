@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1505011963956" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:yaoqiang="http://bpmn.sourceforge.net" expressionLanguage="http://www.w3.org/1999/XPath" id="_1505011963956" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1505011963956" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="helloProcess" isClosed="false" isExecutable="true" processType="None">
+    <extensionElements>
+      <yaoqiang:description/>
+      <yaoqiang:pageFormat height="841.8897637795276" imageableHeight="831.8897637795276" imageableWidth="588.1102362204724" imageableX="5.0" imageableY="5.0" orientation="0" width="598.1102362204724"/>
+      <yaoqiang:page background="#FFFFFF" horizontalCount="1" verticalCount="1"/>
+    </extensionElements>
+    <userTask activiti:assignee="kermit" activiti:exclusive="true" completionQuantity="1" id="usertask1" implementation="##unspecified" isForCompensation="false" name="step1" startQuantity="1"/>
+    <userTask activiti:assignee="stone" activiti:exclusive="true" completionQuantity="1" id="usertask2" implementation="##unspecified" isForCompensation="false" name="step2" startQuantity="1"/>
+    <sequenceFlow id="_7" sourceRef="startEvent1" targetRef="usertask1"/>
+    <startEvent activiti:initiator="firstPerson" id="startEvent1" isInterrupting="true" name="start" parallelMultiple="false"/>
+    <sequenceFlow id="_8" sourceRef="usertask1" targetRef="usertask2"/>
+    <sequenceFlow id="_9" sourceRef="usertask2" targetRef="endevent1"/>
+    <endEvent id="endevent1" name="End"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="helloProcess">
+    <bpmndi:BPMNPlane bpmnElement="helloProcess">
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="Shape-usertask1">
+        <dc:Bounds height="55.0" width="85.0" x="240.66666666666663" y="233.50000000000006"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask2" id="Shape-usertask2">
+        <dc:Bounds height="55.0" width="85.0" x="452.33333333333326" y="235.16666666666674"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="Shape-startEvent1">
+        <dc:Bounds height="32.0" width="32.0" x="109.33333333333326" y="247.50000000000006"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="Shape-endevent1">
+        <dc:Bounds height="32.0" width="32.0" x="635.3333333333333" y="244.83333333333337"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="_2" targetElement="_3">
+        <di:waypoint x="140.99218559171948" y="263.50000000000006"/>
+        <di:waypoint x="241.0" y="261.00000000000006"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="21.02" width="6.0" x="188.0" y="251.74"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="_3" targetElement="_4">
+        <di:waypoint x="326.0" y="261.00000000000006"/>
+        <di:waypoint x="452.0" y="262.66666666666674"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="21.02" width="6.0" x="386.0" y="251.32"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9" sourceElement="_4" targetElement="_6">
+        <di:waypoint x="537.0" y="262.66666666666674"/>
+        <di:waypoint x="635.0008680791043" y="260.83333333333337"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="21.02" width="6.0" x="682.83" y="252.07"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
