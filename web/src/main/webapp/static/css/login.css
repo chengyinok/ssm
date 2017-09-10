@@ -1,10 +1,12 @@
 
 .login-body{
-    background-image:#ffffff url("../img/login.png") ;
+    background-image:url("../img/login.png");
+    background-color: #2aabd2;
+    background-repeat: no-repeat;
 }
 
 .login-box{
-    border: 1px solid #004444;
+    border: 2px solid #004444;
     border-radius: 5px;
     padding: 20px;
     margin: 50px auto;
